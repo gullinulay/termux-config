@@ -196,6 +196,10 @@ Plug 'neoclide/coc-pairs', {'do': 'yarn install --frozen-lockfile'}
 Plug 'iamcco/coc-angular', {'do': 'yarn install --frozen-lockfile && yarn build'}
 Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
 
+" post install (yarn install | npm install) then load plugin only for editing supported files
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install --frozen-lockfile --production',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 "Plug 'Shougo/deoplete.nvim'
 "Plug 'roxma/nvim-yarp'
 "Plug 'roxma/vim-hug-neovim-rpc'   
@@ -245,5 +249,10 @@ nmap <F6> :NERDTreeToggle<CR>
 
 let g:deoplete#enable_at_startup = 1 
 
+au FileType css,scss let b:prettier_exec_cmd = "prettier-stylelint"
+nmap <F4> <Plug>(Prettier)
+let g:prettier#autoformat = 1
+let g:prettier#autoformat_require_pragma = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
 " EOF
 
