@@ -1,4 +1,4 @@
-
+set encoding=UTF-8
 " Basiert auf http://spf13.com/post/perfect-vimrc-vim-config-file/
 " -> https://github.com/spf13/spf13-vim/blob/master/.vimrc
 
@@ -156,7 +156,7 @@ Plug 'leafgarland/typescript-vim'
 Plug 'vim-syntastic/syntastic'
 
 " Provides syntax highlight for contents in Template Strings.
-"Plug 'Quramy/vim-js-pretty-template'
+Plug 'Quramy/vim-js-pretty-template'
 
 " Works as a client for TSServer (which is an editor service bundled into TypeScript)
 Plug 'Quramy/tsuquyomi'
@@ -175,7 +175,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'bdauria/angular-cli.vim'
 
 " On-demand loading
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }
 
 " Using a non-master branch
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
@@ -189,6 +189,7 @@ Plug 'ianks/vim-tsx', { 'for': 'typescript.tsx' }
 " Syntax highlight for .ts
 Plug 'HerringtonDarkholme/yats.vim', { 'for': 'typescript' }
 
+" COC LSP
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-prettier', {'do': 'yarn install --frozen-lockfile'}
@@ -200,9 +201,7 @@ Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install --frozen-lockfile --production',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
-"Plug 'Shougo/deoplete.nvim'
-"Plug 'roxma/nvim-yarp'
-"Plug 'roxma/vim-hug-neovim-rpc'   
+
 
 " Initialize plugin system
 call plug#end()
@@ -214,8 +213,10 @@ autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 
 " Configuration for vim-js-pretty
-"autocmd FileType typescript JsPreTmpl html
-"autocmd FileType typescript syn clear foldBraces
+call jspretmpl#register_tag('ts', 'typescript' )
+autocmd FileType typescript JsPreTmpl
+autocmd FileType typescript syn clear foldBraces
+autocmd FileType javascript JsPreTmpl
 
 " Configuration for Syntastic
 set statusline+=%#warningmsg#
@@ -236,19 +237,12 @@ inoremap <silent><expr> <Tab>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
-
-" use <c-space> for trigger completion
-inoremap <silent><expr> <c-space> coc#refresh()
-" Use <C-@> on vim
-inoremap <silent><expr> <c-@> coc#refresh()
-
-inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
 inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
 
+"NerdTree Toggle Remap Key
 nmap <F6> :NERDTreeToggle<CR>
 
-let g:deoplete#enable_at_startup = 1 
-
+" vim_prettier Configuration
 au FileType css,scss let b:prettier_exec_cmd = "prettier-stylelint"
 nmap <F4> <Plug>(Prettier)
 let g:prettier#autoformat = 1
